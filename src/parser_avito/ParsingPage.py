@@ -25,7 +25,10 @@ class ParsingPage:
     def parse_address(self):
         list_address = []
         try:
-
+            container_div_address = self.parser.find_all("div", class_="_93444fe79c--labels--L8WyJ")
+            for elements in container_div_address:
+                list_address.append(elements.text)
+            return list_address
         except:
             return "N/A"
 

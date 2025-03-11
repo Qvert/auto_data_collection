@@ -6,7 +6,7 @@ def main():
     scrapped_page = []
     url = 'https://krasnoyarsk.cian.ru/snyat-kvartiru/'
     parsing_page = ParsingPage(url, headers=HEADERS)
-    print(parsing_page.parse_price())
+    print(parsing_page.parse_address())
 
 if __name__ == '__main__':
     main()
