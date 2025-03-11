@@ -10,13 +10,24 @@ class ParsingPage:
         self.parser = BeautifulSoup(self.page.content, 'lxml')
 
     def parse_price(self):
+        list_prices = []
         try:
-            return self.parser.find("div", class_="_93444fe79c--container--aWzpE").text
-        except:
+            block = self.parser.find_all("div", class_="_93444fe79c--container--aWzpE")
+            for elements in block:
+                price = elements.text
+                if price.endswith("мес."):
+                    list_prices.append(price)
+            return list_prices
+        except Exception as _err:
+            print(_err)
             return "N/A"
 
     def parse_address(self):
-        pass
+        list_address = []
+        try:
+
+        except:
+            return "N/A"
 
     def parse_photo(self):
         pass
