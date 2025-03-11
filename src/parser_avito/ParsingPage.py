@@ -7,13 +7,13 @@ class ParsingPage:
         self.url = url
         self.headers = headers
         self.page = requests.get(self.url, headers=self.headers)
-        self.parser = BeautifulSoup(self.page.content, 'html.parser')
+        self.parser = BeautifulSoup(self.page.content, 'lxml')
 
     def parse_price(self):
         try:
-            price = self.parser
+            return self.parser.find("div", class_="_93444fe79c--container--aWzpE").text
         except:
-            price = "N/A"
+            return "N/A"
 
     def parse_address(self):
         pass
