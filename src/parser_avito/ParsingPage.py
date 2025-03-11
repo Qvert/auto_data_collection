@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 
 class ParsingPage:
@@ -6,7 +7,27 @@ class ParsingPage:
         self.url = url
         self.headers = headers
         self.page = requests.get(self.url, headers=self.headers)
+        self.parser = BeautifulSoup(self.page.content, 'html.parser')
 
+    def parse_price(self):
+        try:
+            price = self.parser
+        except:
+            price = "N/A"
 
+    def parse_address(self):
+        pass
+
+    def parse_photo(self):
+        pass
+
+    def parse_link(self):
+        pass
+
+    def parse_phone(self):
+        pass
+
+    def parse_name(self):
+        pass
 
 

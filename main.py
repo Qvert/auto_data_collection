@@ -7,6 +7,7 @@ from src.parser_avito.settings import HEADERS
 
 
 def main():
+    scrapped_page = []
     parsing_page = ParsingPage("https://krasnoyarsk.cian.ru/snyat-kvartiru/",
                                headers=HEADERS)
 
