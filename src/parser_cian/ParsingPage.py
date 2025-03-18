@@ -40,7 +40,7 @@ class ParsingPage:
         list_photo = []
         container_a_photo = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
         for link in container_a_photo:
-            time.sleep(1)
+            time.sleep(2)
             open_link = requests.get(link.get("href"), headers=HEADERS_PARSER)
             print(open_link.status_code)
             parser_photo = BeautifulSoup(open_link.content, 'lxml')
