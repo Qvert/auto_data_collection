@@ -1,6 +1,7 @@
 import time
 
 import requests
+import random
 from bs4 import BeautifulSoup
 
 from src.parser_cian.settings import HEADERS_PARSER
@@ -40,7 +41,7 @@ class ParsingPage:
         list_photo = []
         container_a_photo = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
         for link in container_a_photo:
-            time.sleep(2)
+            time.sleep(random.uniform(1, 6))
             open_link = requests.get(link.get("href"), headers=HEADERS_PARSER)
             print(open_link.status_code)
             parser_photo = BeautifulSoup(open_link.content, 'lxml')
@@ -76,13 +77,15 @@ class ParsingPage:
     def parse_name(self):
         list_name = []
         try:
-            container_div_name = self.parser.find_all("span", class_="_93444fe79c--color_text-main-default--HgSpe "
-                                                                     "_93444fe79c--lineHeight_28px--KFXmc "
-                                                                     "_93444fe79c--fontWeight_bold--BbhnX "
+            container_div_name = self.parser.find_all("span", class_="_93444fe79c--color_text"
+                                                                     "-main-default--HgSpe"
+                                                                     " _93444fe79c--lineHeight_28px--KFXmc"
+                                                                     " _93444fe79c--fontWeight_bold--BbhnX "
                                                                      "_93444fe79c--fontSize_22px--sFuaL "
-                                                                     "_93444fe79c--display_block--KYb25 "
-                                                                     "_93444fe79c--text--e4SBY "
-                                                                     "_93444fe79c--text_letterSpacing__normal--tfToq")
+                                                                     "_93444fe79c--display_block--KYb25"
+                                                                     " _93444fe79c--text--b2YS3 _93444fe79c"
+                                                                     "--text_letterSpacing__normal--yhcXb")
+
             for elements in container_div_name:
                 list_name.append(elements.text)
             return list_name
