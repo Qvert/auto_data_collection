@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import re
 
-df = pd.read_csv("../utils/hata.csv")
+df = pd.read_csv("../utils_/hata.csv")
 
 def clean_data(data_frame):
     print("\nHandling Missing Data...")
@@ -39,3 +39,4 @@ def show_extreme_listings(df):
     print(df.nsmallest(5, 'Price')["Price"])
 
 show_extreme_listings(df)
+df.to_csv("../utils_/hata.csv", index=False)

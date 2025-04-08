@@ -1,11 +1,9 @@
 from datetime import date
-import pandas as pd
-from selenium.webdriver.common.devtools.v85.debugger import pause
 
 from src.parser_cian.ParsingPage import ParsingPage
 from src.parser_cian.settings import HEADERS_PARSER
 
-from src.utils.save_data_csv import save_to_csv
+from src.utils_.save_data_csv import save_to_csv
 
 
 def main():
@@ -40,7 +38,7 @@ def main():
                 "Date parse": date_parse,
                 "Source": source_site,
             })
-    save_to_csv(list_dict_to_load_csv, "src/utils/hata.csv")
+    save_to_csv(list_dict_to_load_csv, "src/utils_/hata.csv")
 
 
 if __name__ == '__main__':
