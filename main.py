@@ -2,8 +2,10 @@ from datetime import date
 
 from src.parser_cian.ParsingPage import ParsingPage
 from src.parser_cian.settings import HEADERS_PARSER
-
+from src.streamlit.dashboard import create_dashboard_streamlit, slide_bar_filter, show_price_distribution
 from src.utils_.save_data_csv import save_to_csv
+from src.streamlit.load_data import load_data
+
 
 
 def main():
@@ -39,6 +41,11 @@ def main():
                 "Source": source_site,
             })
     save_to_csv(list_dict_to_load_csv, "src/utils_/hata.csv")
+
+    load_data_frame = load_data()
+    filtered_data_frame = slide_bar_filter(load_data_frame)
+    create_dashboard_streamlit(filtered_data_frame)
+    show_price_distribution(filtered_data_frame)
 
 
 if __name__ == '__main__':
