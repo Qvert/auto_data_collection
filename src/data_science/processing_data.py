@@ -15,13 +15,6 @@ def clean_data(data_frame):
 
 df = clean_data(df)
 
-def extract_numeric(value):
-    if isinstance(value, str):
-        match = re.search(r'\d+', value)  # Find first numeric value
-        return float(match.group()) if match else np.nan
-    return np.nan
-
-
 def convert_columns(df):
     print("Converting Columns...")
     df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
@@ -30,13 +23,4 @@ def convert_columns(df):
     return df
 
 df = convert_columns(df)
-
-
-def show_extreme_listings(df):
-    print("\nTop 5 Most Expensive Listings:")
-    print(df.nlargest(5, 'Price')["Price"])
-    print("\nTop 5 Cheapest Listings:")
-    print(df.nsmallest(5, 'Price')["Price"])
-
-show_extreme_listings(df)
 df.to_csv("../utils_/hata.csv", index=False)
