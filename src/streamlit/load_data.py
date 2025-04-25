@@ -9,4 +9,3 @@ def load_data():
 
     return data_frame
 
-df = load_data()

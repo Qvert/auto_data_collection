@@ -44,6 +44,7 @@ class ParsingPage:
             time.sleep(random.uniform(1, 6))
             open_link = requests.get(link.get("href"), headers=HEADERS_PARSER)
             print(open_link.status_code)
+
             parser_photo = BeautifulSoup(open_link.content, 'lxml')
             all_photo = parser_photo.find_all("img", class_='a10a3f92e9--container--KIwW4')
             list_all_to_one_property = []

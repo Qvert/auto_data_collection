@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as mtick
 
+from src.parser_cian.ParsingPages import ParsingPages
+from src.parser_cian.settings import URL_PAGE_1, URL_PAGE_2
+
 
 def create_dashboard_streamlit(filtered_df):
     st.title("🏡 Информационная панель Циан.ру")
@@ -53,3 +56,11 @@ def show_price_distribution(filtered_df):
         ax.set_xlabel("Цена (₽)")
         ax.set_ylabel("Кол-во")
         st.pyplot(fig)
+
+def create_button_parse():
+    if st.button("Собрать данные"):
+        print("Start parse")
+        parsing = ParsingPages(url=[URL_PAGE_1, URL_PAGE_2], pages=3)
+        parsing.parsing_pages()
+
+
