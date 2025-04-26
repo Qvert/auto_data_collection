@@ -10,3 +10,7 @@ USER_AGENTS = [
 ]
 HEADERS = {"User-Agent": random.choice(USER_AGENTS)}
 HEADERS_PARSER = {"User-Agent": ua.random}
+URL_PAGE_1 = f'https://krasnoyarsk.cian.ru/cat.php?deal_type=rent&engine_version=2&offer_type=flat&p='
+URL_PAGE_2 = f'&region=4827&type=4'
+
+API_KEY = '0585a3a6-e7df-499d-83ea-573e16a5dd16'
