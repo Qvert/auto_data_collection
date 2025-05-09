@@ -7,7 +7,6 @@ import seaborn as sns
 import matplotlib.ticker as mtick
 import folium
 import requests
-import urllib.parse
 
 from streamlit_folium import st_folium
 
