@@ -93,4 +93,7 @@ class ParsingPage:
         except:
             return "N/A"
 
+    def parse_square(self):
+        pass
+
 
