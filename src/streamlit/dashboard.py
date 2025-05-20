@@ -1,5 +1,3 @@
-import time
-
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -11,7 +9,7 @@ import requests
 from streamlit_folium import st_folium
 
 from src.parser_cian.ParsingPages import ParsingPages
-from src.parser_cian.settings import URL_PAGE_1, URL_PAGE_2, API_KEY
+from src.parser_cian.settings import URL_PAGE_1, URL_PAGE_2, API_KEY, PAGES_PARSE
 
 
 def create_dashboard_streamlit(filtered_df):
@@ -20,7 +18,7 @@ def create_dashboard_streamlit(filtered_df):
     st.subheader(f"📊 {len(filtered_df)} Найденные объявления")
 
     selected_rows = st.data_editor(
-        filtered_df[["Price", "Address", "Link", "Description"]]
+        filtered_df[["Price", "Address", "Link", "Description", "М^2"]]
         .sort_values(by="Price", ascending=False)
         .reset_index(drop=True),
         use_container_width=True,
@@ -62,21 +60,6 @@ def show_price_distribution(filtered_df):
         ax.set_xlabel("Цена (₽)")
         ax.set_ylabel("Кол-во")
         st.pyplot(fig)
-
-def create_button_parse():
-    if st.button("Собрать данные"):
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-
-        for i in range(100):
-            time.sleep(0.05)
-            progress_bar.progress(i + 1)
-            status_text.text(f"Прогресс: {i + 1}%")
-
-        parsing = ParsingPages(url=[URL_PAGE_1, URL_PAGE_2], pages=3)
-        parsing.parsing_pages()
-        st.success("Сбор данных завершен!")
-        return
 
 
 def create_interactive_map(filtered_df):

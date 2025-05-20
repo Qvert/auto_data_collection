@@ -17,16 +17,16 @@ class ParsingPages:
 
         for i in range(1, self.pages + 1):
             url_page = self.url[0] + f'{i}' + self.url[1]
-            parsing_page = ParsingPage(url_page, headers=HEADERS_PARSER)
+            parsing_page = ParsingPage(url_page, HEADERS_PARSER)
             source_site = url_page.split("//")[1].split('/')[0]
 
-            for name, price, address, link, desc, photo in zip(parsing_page.parse_name(),
-                                                               parsing_page.parse_price(),
-                                                               parsing_page.parse_address(),
-                                                               parsing_page.parse_link(),
-                                                               parsing_page.parse_description(),
-                                                               parsing_page.parse_photo(),
-                                                               ):
+            for name, price, address, link, desc, photo, square in zip(parsing_page.parse_name(),
+                                                                       parsing_page.parse_price(),
+                                                                       parsing_page.parse_address(),
+                                                                       parsing_page.parse_link(),
+                                                                       parsing_page.parse_description(),
+                                                                       parsing_page.parse_photo(),
+                                                                       parsing_page.parse_square()):
                 self.list_parse_pages.append({
                     "Name": name,
                     "Price": price,
@@ -36,6 +36,7 @@ class ParsingPages:
                     "Photo": photo,
                     "Date parse": date_parse,
                     "Source": source_site,
+                    "М^2": square,
                 })
         self.save_to_file()
 
