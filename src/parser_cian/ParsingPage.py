@@ -96,11 +96,22 @@ class ParsingPage:
         try:
             container_span_square = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
             for elements in container_span_square:
-                if elements.isdigit():
+                flag = True
+                for elem in elements.text.split(", ")[1].split(' ')[0]:
+                    if not elem.isdigit():
+                        flag = False
+                        break
+                if flag:
                     list_square.append(elements.text.split(", ")[1])
+                else:
+                    list_square.append("NaN")
+
             print(list_square)
             return list_square
         except:
             return ["N/A"]
 
 
+
+parser = ParsingPage(url="https://krasnoyarsk.cian.ru/cat.php?deal_type=rent&engine_version=2&offer_type=flat&p=2&region=4827&type=4")
+print(parser.parse_square())

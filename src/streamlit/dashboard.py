@@ -35,7 +35,7 @@ def slide_bar_filter(df):
         filtered_df = df
     else:
 
-        min_price_value = max(1000, df["Price"].min())
+        min_price_value = df["Price"].min()
         max_price_value = np.ceil(df["Price"].max() / 100_000) * 100_000
 
         min_price, max_price = st.sidebar.slider(
