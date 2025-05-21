@@ -11,4 +11,5 @@ URL_PAGE_1 = f'https://krasnoyarsk.cian.ru/cat.php?deal_type=rent&engine_version
 URL_PAGE_2 = f'&region=4827&type=4'
 
 API_KEY = '0585a3a6-e7df-499d-83ea-573e16a5dd16'
-PAGES_PARSE = 1
+PAGES_PARSE = 2
+DATA_PATH = "src/utils_/hata.csv"

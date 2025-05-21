@@ -43,7 +43,6 @@ class ParsingPage:
         for link in container_a_link_photo:
             time.sleep(random.uniform(1, 6))
             open_link = requests.get(link.get("href"), headers=HEADERS_PARSER)
-            print(open_link.status_code)
             parser_photo = BeautifulSoup(open_link.content, 'lxml')
             all_photo = parser_photo.find_all("img", class_='a10a3f92e9--container--KIwW4')
             list_all_to_one_property = []
@@ -106,12 +105,7 @@ class ParsingPage:
                 else:
                     list_square.append("NaN")
 
-            print(list_square)
             return list_square
         except:
             return ["N/A"]
 
-
-
-parser = ParsingPage(url="https://krasnoyarsk.cian.ru/cat.php?deal_type=rent&engine_version=2&offer_type=flat&p=2&region=4827&type=4")
-print(parser.parse_square())

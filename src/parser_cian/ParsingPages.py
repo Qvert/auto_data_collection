@@ -1,46 +1,81 @@
+import time
 from datetime import date
-
+import pandas as pd
+from tqdm import tqdm
 from src.parser_cian.ParsingPage import ParsingPage
-from src.parser_cian.settings import HEADERS_PARSER
+from src.parser_cian.settings import HEADERS_PARSER, DATA_PATH, HEADERS
 from src.utils_.save_data_csv import save_to_csv
 
 
 class ParsingPages:
-    def __init__(self, url, pages=1):
-        self.pages = pages
-        self.url = url
-        self.list_parse_pages = []
+    def __init__(self, base_urls, max_pages=1, delay=1.0):
+        self.base_urls = base_urls
+        self.max_pages = max(max_pages, 1)
+        self.delay = max(delay, 0.5)
+        self.data = []
+        self.failed_pages = []
 
-    def parsing_pages(self):
-        assert self.pages >= 1
-        date_parse = date.today()
+    def parse_single_page(self, url):
+        """Парсинг одной страницы"""
+        try:
+            parser = ParsingPage(url, HEADERS)
+            source_site = url.split("//")[1].split('/')[0]
 
-        for i in range(1, self.pages + 1):
-            url_page = self.url[0] + f'{i}' + self.url[1]
-            parsing_page = ParsingPage(url_page, HEADERS_PARSER)
-            source_site = url_page.split("//")[1].split('/')[0]
-
-            for name, price, address, link, desc, photo, square in zip(parsing_page.parse_name(),
-                                                                       parsing_page.parse_price(),
-                                                                       parsing_page.parse_address(),
-                                                                       parsing_page.parse_link(),
-                                                                       parsing_page.parse_description(),
-                                                                       parsing_page.parse_photo(),
-                                                                       parsing_page.parse_square()):
-                self.list_parse_pages.append({
+            results = []
+            for name, price, address, link, desc, photo, square in zip(
+                    parser.parse_name(),
+                    parser.parse_price(),
+                    parser.parse_address(),
+                    parser.parse_link(),
+                    parser.parse_description(),
+                    parser.parse_photo(),
+                    parser.parse_square()
+            ):
+                results.append({
                     "Name": name,
                     "Price": price,
                     "Address": address,
                     "Link": link,
                     "Description": desc,
                     "Photo": photo,
-                    "Date parse": date_parse,
-                    "Source": source_site,
-                    "М^2": square,
+                    "Square (м²)": square,
+                    "Date parse": date.today(),
+                    "Source": source_site
                 })
-        self.save_to_file()
+            return results
 
+        except Exception as e:
+            print(f"Ошибка при парсинге {url}: {str(e)}")
+            self.failed_pages.append(url)
+            return []
 
-    def save_to_file(self):
-        save_to_csv(self.list_parse_pages, "src/utils_/hata.csv")
+    def parse_all_pages(self):
+        """Парсинг всех страниц с обработкой прогресса"""
+        self.data = []
+        self.failed_pages = []
 
+        for page_num in tqdm(range(1, self.max_pages + 1), desc="Парсинг страниц"):
+            try:
+                page_url = f"{self.base_urls[0]}{page_num}{self.base_urls[1]}"
+
+                # Парсим страницу
+                page_data = self.parse_single_page(page_url)
+                self.data.extend(page_data)
+
+                # Задержка между запросами
+                time.sleep(self.delay)
+
+            except Exception as e:
+                print(f"Критическая ошибка на странице {page_num}: {str(e)}")
+                self.failed_pages.append(page_num)
+        self.save_to_csv_parse()
+        return self.data
+
+    def save_to_csv_parse(self, filename=DATA_PATH):
+        if not self.data:
+            print("Нет данных для сохранения!")
+            return False
+
+        df = pd.DataFrame(self.data)
+        save_to_csv(df, filename)
+        return True
