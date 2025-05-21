@@ -39,18 +39,16 @@ class ParsingPage:
 
     def parse_photo(self):
         list_photo = []
-        container_a_photo = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
-        for link in container_a_photo:
+        container_a_link_photo = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
+        for link in container_a_link_photo:
             time.sleep(random.uniform(1, 6))
             open_link = requests.get(link.get("href"), headers=HEADERS_PARSER)
             print(open_link.status_code)
-
             parser_photo = BeautifulSoup(open_link.content, 'lxml')
             all_photo = parser_photo.find_all("img", class_='a10a3f92e9--container--KIwW4')
             list_all_to_one_property = []
             for photo in all_photo:
                 list_all_to_one_property.append(photo.get("src"))
-            print(list_all_to_one_property, sep='\n')
             list_photo.append(list_all_to_one_property)
         return list_photo
 
@@ -91,9 +89,29 @@ class ParsingPage:
                 list_name.append(elements.text)
             return list_name
         except:
-            return "N/A"
+            return ["N/A"]
 
     def parse_square(self):
-        pass
+        list_square = []
+        try:
+            container_span_square = self.parser.find_all("a", class_="_93444fe79c--link--VtWj6")
+            for elements in container_span_square:
+                flag = True
+                for elem in elements.text.split(", ")[1].split(' ')[0]:
+                    if not elem.isdigit():
+                        flag = False
+                        break
+                if flag:
+                    list_square.append(elements.text.split(", ")[1])
+                else:
+                    list_square.append("NaN")
+
+            print(list_square)
+            return list_square
+        except:
+            return ["N/A"]
 
 
+
+parser = ParsingPage(url="https://krasnoyarsk.cian.ru/cat.php?deal_type=rent&engine_version=2&offer_type=flat&p=2&region=4827&type=4")
+print(parser.parse_square())
