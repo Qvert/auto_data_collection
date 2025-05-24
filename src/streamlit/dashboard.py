@@ -1,14 +1,15 @@
-import numpy as np
+from functools import lru_cache
+
+import requests
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as mtick
 import folium
-import requests
 
 from streamlit_folium import st_folium
 
-from src.parser_cian.settings import URL_PAGE_1, URL_PAGE_2, API_KEY, PAGES_PARSE
+from src.parser_cian.settings import API_KEY
 
 
 def create_dashboard_streamlit(filtered_df):
@@ -75,6 +76,18 @@ def show_price_distribution(filtered_df):
         st.pyplot(fig)
 
 
+@lru_cache(maxsize=1000)
+def get_coordinates(address):
+    url = f"https://geocode-maps.yandex.ru/1.x/?format=json&geocode={address}&apikey={API_KEY}"
+    try:
+        response = requests.get(url).json()
+        pos = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
+        return tuple(map(float, pos.split()))
+    except Exception as e:
+        print(f"Ошибка геокодирования для адреса {address}: {str(e)}")
+        return None
+
+
 def create_interactive_map(filtered_df):
     st.subheader("📍 Расположение недвижимости")
     m = folium.Map(location=[56.01, 92.86], zoom_start=12)
@@ -84,22 +97,12 @@ def create_interactive_map(filtered_df):
         Price: ₽{row['Price']:,.0f}<br>
         <a href="{row['Link']}" target="_blank">View Listing</a>
         """
-        address = row["Address"]
-        base_url = "https://geocode-maps.yandex.ru/1.x"
-        params = {
-            "geocode": address,
-            "apikey": API_KEY,
-            "format": "json"
-        }
-        response = requests.get(base_url, params=params).json()
-        pos = response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
-        pos_lat, pos_lon = tuple(map(float, pos.split()))
         icon_color = "red"
-
+        pos_lan, post_lng = get_coordinates(row["Address"])
         folium.Marker(
-            location=[pos_lon, pos_lat],
+            location=[post_lng, pos_lan],
             popup=popup_info,
             icon=folium.Icon(color=icon_color, icon="home"),
         ).add_to(m)
     st_folium(m, width=800, height=500)
-    st.write("Data Source: Redfin Scraper")
+    st.write("Data Source: Cian Scraper")
